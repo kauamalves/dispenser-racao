@@ -7,10 +7,11 @@
 #define SERVO1 5
 #define echoPin 4
 #define trigPin 3
+#define ledOn 2
 
-LiquidCrystal_I2C lcd(0x27, 20, 4);   // Inicializa o LCD com endereço 0x27, 20 colunas e 4 linhas
+LiquidCrystal_I2C lcd(0x27, 20, 4);     // Inicializa o LCD com endereço 0x27, 20 colunas e 4 linhas
 RTC_DS1307 rtc;                         // Objeto para manipulação do módulo RTC
-Servo s1;                              // Objeto para manipulação do servo motor
+Servo s1;                               // Objeto para manipulação do servo motor
 Ultrasonic ultrasonic(trigPin, echoPin);// Objeto para manipulação do sensor ultrassônico
 
 int distancia;                          // Variável para armazenar a distância medida pelo sensor ultrassônico
@@ -21,6 +22,7 @@ char daysOfTheWeek[7][12] = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta",
 void setup() {
   pinMode(echoPin, INPUT);              // Define o pino echo como INPUT
   pinMode(trigPin, OUTPUT);             // Define o pino trig como OUTPUT
+  pinMode(ledOn, OUTPUT);               // Define o pino do led ligado como OUTPUT
 
   Serial.begin(9600);                   // Inicializa a comunicação serial
   hcsr04();                             // Chama a função para inicializar o sensor ultrassônico
@@ -57,8 +59,10 @@ void loop() {
   lcd.print(now.minute());
   lcd.setCursor(1, 1);
   lcd.print("Iniciando sensores...");
-    
+  delay(500);
+  
   // Limpa o LCD
+  digitalWrite(ledOn, HIGH);
   lcd.clear();
   lcd.setCursor(3, 0);
   lcd.print("LIA - ");
